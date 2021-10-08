@@ -1,3 +1,9 @@
-test/
+.editorconfig
+.eslintrc.cjs
+.jsdoc.conf
+.vscode/
 ava.config.js
 coverage/
+docs/
+test/
+tsconfig.json

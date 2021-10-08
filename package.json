@@ -7,20 +7,40 @@
   "scripts": {
     "test": "ava",
     "coverage": "c8 --all --src lib -r lcov npm test",
-    "lint": "eslint . --ext js"
+    "lint": "eslint . --ext js",
+    "docs": "jsdoc -c .jsdoc.conf",
+    "types": "tsc",
+    "check": "npm run lint && npm run types && npm run docs && npm pack --dry-run"
   },
-  "keywords": [],
+  "keywords": [
+    "tls",
+    "ssl",
+    "socket",
+    "server",
+    "certificate",
+    "X.509",
+    "ca",
+    "certificate authority",
+    "localhost",
+    "test",
+    "mock"
+  ],
   "author": "Joe Hildebrand <joe-github@cursive.net>",
   "license": "MIT",
+  "dependencies": {
+    "jsrsasign": "^10.4.1"
+  },
   "devDependencies": {
     "@cto.af/eslint-config": "^0.0.10",
+    "@types/node": "^16.10.3",
     "ava": "^3.15.0",
     "c8": "^7.10.0",
     "eslint": "^7.32.0",
     "eslint-plugin-jsdoc": "^36.1.0",
-    "eslint-plugin-node": "^11.1.0"
-  },
-  "dependencies": {
-    "jsrsasign": "^10.4.1"
+    "eslint-plugin-node": "^11.1.0",
+    "jsdoc": "^3.6.7",
+    "minami": "^1.2.3",
+    "p-event": "^4.2.0",
+    "typescript": "^4.4.3"
   }
 }
