@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ca.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="CertificateAuthority.html">CertificateAuthority</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="CertificateAuthority.html#issue">issue</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="HalfSocket.html">HalfSocket</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="HalfSocket.html#emit">emit</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="MockSocket.html">MockSocket</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Server.html">Server</a></span></li><li class="nav-heading">Events</li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="HalfSocket.html#event:written">written</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#connect">connect</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createServer">createServer</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#log">log</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ca.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import * as rs from 'jsrsasign'
+
+const MINS_5 = 5 * 60 * 1000
+const SECS_1 = 1000
+
+// Private map of CertificateAuthority => private key
+const PRIVATE = new WeakMap()
+
+/**
+ * @typedef {object} CertOpts
+ * @property {Date} [notafter='Now + 5m'] Certificate not valid after this
+ *   date.
+ * @property {Date} [notbefore='Now - 1s'] Certificate not valid before this
+ *   date.
+ * @property {string} [subject] Subject Distinguished Name (DN).
+ * @property {string[]} [names=['localhost']] DNS Subject Alternative Names
+ *   for the cert.  Ignored for the CA cert.
+ */
+
+/**
+ * @typedef {object} ServerProperties
+ * @property {string} cert PEM-encoded server certificate.
+ * @property {string} key PEM-encoded server private key.
+ * @property {string} ca PEM-encoded CA certificate.
+ */
+
+/**
+ * Very rudimentary Certificate Authority (CA).
+ * Warning: DO NOT use this on the Internet.  It is only for testing purposes.
+ */
+export class CertificateAuthority {
+  /**
+   * Creates an instance of CertificateAuthority.
+   *
+   * @param {CertOpts} [opts={}] CA cert options.
+   */
+  constructor(opts = {}) {
+    const now = new Date().getTime()
+    opts = {
+      notafter: new Date(now + MINS_5),
+      notbefore: new Date(now - SECS_1),
+      subject: 'C=US/ST=Colorado/L=Denver/CN=Example-Root-CA',
+      ...opts,
+    }
+
+    this.subject = opts.subject
+
+    // Create a self-signed CA cert
+    const ca_kp = rs.KEYUTIL.generateKeypair('RSA', 1024)
+    PRIVATE.set(this, ca_kp.prvKeyObj)
+    const pub = ca_kp.pubKeyObj
+
+    const ca_cert = new rs.KJUR.asn1.x509.Certificate({
+      version: 3,
+      serial: {int: now},
+      issuer: {str: opts.subject},
+      notbefore: {str: rs.datetozulu(opts.notbefore)},
+      notafter: {str: rs.datetozulu(opts.notafter)},
+      subject: {str: opts.subject},
+      sbjpubkey: pub,
+      ext: [
+        {extname: 'basicConstraints', cA: true},
+      ],
+      sigalg: 'SHA256withRSA',
+      cakey: PRIVATE.get(this),
+    })
+
+    /** @type {string} */
+    this.cert_pem = ca_cert.getPEM()
+  }
+
+  /**
+   * Creates and signs a server certificate.
+   *
+   * @param {CertOpts} [opts={}] Server cert options.
+   * @returns {ServerProperties} Information about the created certificate.
+   * @throws {Error} No subject or names.
+   */
+  issue(opts) {
+    const now = new Date().getTime()
+    opts = {
+      notafter: new Date(now + MINS_5),
+      notbefore: new Date(now - SECS_1),
+      subject: null,
+      names: ['localhost'],
+      ...opts,
+    }
+
+    if (!opts.subject) {
+      if (opts.names.length === 0) {
+        throw new Error('Must include subject or at least one name in opts')
+      }
+      opts.subject = `C=US/ST=Colorado/L=Denver/CN=${opts.names[0]}`
+    }
+
+    const srv_kp = rs.KEYUTIL.generateKeypair('RSA', 1024)
+    const srv_prv = srv_kp.prvKeyObj
+    const srv_pub = srv_kp.pubKeyObj
+
+    const srv = new rs.KJUR.asn1.x509.Certificate({
+      version: 3,
+      serial: {int: 2},
+      issuer: {str: this.subject},
+      notbefore: {str: rs.datetozulu(opts.notbefore)},
+      notafter: {str: rs.datetozulu(opts.notafter)},
+      subject: {str: opts.subject},
+      sbjpubkey: srv_pub,
+      ext: [
+        {extname: 'authorityKeyIdentifier', kid: this.cert_pem},
+        {extname: 'basicConstraints', cA: false},
+        {
+          extname: 'keyUsage',
+          names: [
+            'digitalSignature',
+            'nonRepudiation',
+            'keyEncipherment',
+            'dataEncipherment',
+          ],
+        },
+        {
+          extname: 'subjectAltName',
+          array: opts.names.map(n => ({dns: n})),
+        },
+      ],
+      sigalg: 'SHA256withRSA',
+      cakey: PRIVATE.get(this),
+    })
+
+    return {
+      cert: srv.getPEM(),
+      key: rs.KEYUTIL.getPEM(srv_prv, 'PKCS1PRV'),
+      ca: this.cert_pem,
+    }
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

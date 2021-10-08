@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>HalfSocket - Documentation</title>
+    <title>CertificateAuthority - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">HalfSocket</h1>
+    <h1 class="page-title">CertificateAuthority</h1>
     
 
     
@@ -42,11 +42,11 @@
 <header>
     
         <h2>
-        HalfSocket
+        CertificateAuthority
         </h2>
         
-            <div class="class-description">One end of a socket, either client or server.  Serves as a pass-through to
-the other side.</div>
+            <div class="class-description">Very rudimentary Certificate Authority (CA).
+Warning: DO NOT use this on the Internet.  It is only for testing purposes.</div>
         
     
 </header>
@@ -61,14 +61,14 @@ the other side.</div>
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="HalfSocket"><span class="type-signature"></span>new HalfSocket<span class="signature">(name, opts)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CertificateAuthority"><span class="type-signature"></span>new CertificateAuthority<span class="signature">(opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Creates an instance of HalfSocket.
+    Creates an instance of CertificateAuthority.
 </div>
 
 
@@ -104,200 +104,7 @@ the other side.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="socket.js.html">socket.js</a>, <a href="socket.js.html#line33">line 33</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                The name of this socket end, for debugging.
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>opts</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>stream.DuplexOptions</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Options for the socket end.
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<h5>Fires:</h5>
-<ul>
-    <li>{HalfSocket#written} When data is written to this side of the socket
-  to be sent.event:</li>
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-</div>
-    
-    </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="HalfSocket.html">HalfSocket</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="emit"><span class="type-signature"></span>emit<span class="signature">(eventName, &hellip;args)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Add debug logging to EventEmitter.  Start with NODE_DEBUG=mock-tls-server
-to see all events.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="socket.js.html">socket.js</a>, <a href="socket.js.html#line62">line 62</a>
+        <a href="ca.js.html">ca.js</a>, <a href="ca.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -333,6 +140,8 @@ to see all events.
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -343,13 +152,13 @@ to see all events.
 
         <tr>
             
-                <td class="name"><code>eventName</code></td>
+                <td class="name"><code>opts</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>string</code></span>
+<span class="param-type"><code><a href="global.html#CertOpts">CertOpts</a></code></span>
 
 
             
@@ -357,6 +166,8 @@ to see all events.
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -366,45 +177,15 @@ to see all events.
             
 
             
-
-            <td class="description last">
-                The name of the event.
+                <td class="default">
                 
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>args</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Array.&lt;any></code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                    &lt;repeatable><br>
+                    {}
                 
                 </td>
             
 
-            
-
             <td class="description last">
-                The arguments to be passed to listeners.
+                CA cert options.
                 
             </td>
         </tr>
@@ -426,42 +207,107 @@ to see all events.
 
 
 
-<div class="section-returns">
-<h5>Returns:</h5>
+
+
+</div>
+    
+    </div>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="CertificateAuthority.html">CertificateAuthority</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
 
         
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>boolean</code></span>
+            
+<div class="section-members">
+<h4 class="name" id="cert_pem"><span class="type-signature"></span>cert_pem<span class="type-signature"> :string</span></h4>
 
 
-    </dd>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ca.js.html">ca.js</a>, <a href="ca.js.html#line69">line 69</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-<div class="param-desc">
-    Returns `true` if the event had listeners, `false`
-  otherwise.
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>string</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
 </div>
 
-    
-</div>
-
-
-
-</div>
         
     
 
     
-
-    
-        <h3 class="subsection-title">Events</h3>
+        <h3 class="subsection-title">Methods</h3>
 
         
             
@@ -469,14 +315,14 @@ to see all events.
 
     
 
-    <h4 class="name" id="event:written">written</h4>
+    <h4 class="name" id="issue"><span class="type-signature"></span>issue<span class="signature">(opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="global.html#ServerProperties">ServerProperties</a>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Data was written to a HalfSocket.
+    Creates and signs a server certificate.
 </div>
 
 
@@ -512,7 +358,7 @@ to see all events.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="socket.js.html">socket.js</a>, <a href="socket.js.html#line17">line 17</a>
+        <a href="ca.js.html">ca.js</a>, <a href="ca.js.html#line79">line 79</a>
     </li></ul></dd>
     
 
@@ -544,7 +390,11 @@ to see all events.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -556,53 +406,40 @@ to see all events.
 
         <tr>
             
-                <td class="name"><code>data</code></td>
+                <td class="name"><code>opts</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Buffer</code></span>
-|
-
-<span class="param-type"><code>string</code></span>
+<span class="param-type"><code><a href="global.html#CertOpts">CertOpts</a></code></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
             
 
             <td class="description last">
-                The data that was written.
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>encoding</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                The encoding for the data.
+                Server cert options.
                 
             </td>
         </tr>
@@ -622,12 +459,73 @@ to see all events.
 
 
 
+<div class="section-throws">
+<h5>Throws:</h5>
 
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        No subject or names.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="global.html#ServerProperties">ServerProperties</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Information about the created certificate.
+</div>
+
+    
+</div>
 
 
 
 </div>
         
+    
+
+    
+
     
 </article>
 
