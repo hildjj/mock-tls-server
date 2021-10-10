@@ -1,6 +1,8 @@
 .editorconfig
 .eslintrc.cjs
+.github
 .jsdoc.conf
+.ncurc.json
 .vscode/
 ava.config.js
 coverage/
