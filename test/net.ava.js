@@ -30,6 +30,8 @@ test('echo server', async t => {
   const srv2 = net.createServer(null, s => s.end())
   await emitsError(t, () => srv2.listen(8000), 'EADDRINUSE')
 
+  t.is(net.getServer(8000), srv)
+
   const cli = net.connect(8000, () => {
     cli.end('foo')
   })
@@ -37,7 +39,7 @@ test('echo server', async t => {
   cli.on('data', chunk => bufs.push(chunk))
   await pEvent(cli, 'close')
   t.is(Buffer.concat(bufs).toString(), 'Echo\nfoo')
-  t.is(srv.clients.length, 0)
+  t.is(srv.clients.size, 0)
   srv.close() // All clients already closed
   await pEvent(srv, 'close')
   t.is(srv.port, null)
@@ -61,6 +63,7 @@ test('unused port', async t => {
   await pEvent(srv2, 'listening')
   t.is(srv2.port, 1025)
   t.true(listened)
+  srv2.close()
 
   let closed = false
   srv.close(() => (closed = true))
@@ -102,4 +105,6 @@ test('getConnections', async t => {
   srv.listen(8002)
   await pEvent(srv, 'listening')
   t.is(await gc.call(srv), 0)
+  srv.close()
 })
+

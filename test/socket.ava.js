@@ -30,7 +30,7 @@ test('MockSocket', async t => {
   // Since allowHalfOpen is false.
   // cli.end => srv.'end' => srv.end => cli.'finish' => cli.'close'
   const c_close = await pEvent(ms.clientSocket, 'close')
-  t.deepEqual(c_close, undefined)
+  t.is(c_close, undefined)
 })
 
 test('inspect', t => {

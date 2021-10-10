@@ -11,6 +11,11 @@ module.exports = {
   },
   rules: {
     'sort-imports': 'error',
+    'capitalized-comments': ['error', 'always', {
+      ignoreConsecutiveComments: true,
+      ignorePattern: 'c8',
+    }],
+
     // [Possible Errors](https://eslint.org/docs/rules/#possible-errors)
     'node/no-unsupported-features/es-syntax': [
       'error',

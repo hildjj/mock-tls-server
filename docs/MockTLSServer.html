@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>HalfSocket - Documentation</title>
+    <title>MockTLSServer - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">HalfSocket</h1>
+    <h1 class="page-title">MockTLSServer</h1>
     
 
     
@@ -42,11 +42,10 @@
 <header>
     
         <h2>
-        HalfSocket
+        MockTLSServer
         </h2>
         
-            <div class="class-description">One end of a socket, either client or server.  Serves as a pass-through to
-the other side.</div>
+            <div class="class-description">A TLS server that mocks the network, but all of the crypto code is real.</div>
         
     
 </header>
@@ -61,14 +60,14 @@ the other side.</div>
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="HalfSocket"><span class="type-signature"></span>new HalfSocket<span class="signature">(name, opts)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="MockTLSServer"><span class="type-signature"></span>new MockTLSServer<span class="signature">(options<span class="signature-attributes">opt</span>, secureConnectionListener<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Creates an instance of HalfSocket.
+    Create a MockTLSServer instance.
 </div>
 
 
@@ -104,200 +103,7 @@ the other side.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="socket.js.html">socket.js</a>, <a href="socket.js.html#line29">line 29</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                The name of this socket end, for debugging.
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>opts</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>stream.DuplexOptions</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                Options for the socket end.
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<h5>Fires:</h5>
-<ul>
-    <li>{HalfSocket#written} When data is written to this side of the socket
-  to be sent.event:</li>
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-</div>
-    
-    </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="HalfSocket.html">HalfSocket</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="emit"><span class="type-signature"></span>emit<span class="signature">(eventName, &hellip;args)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Add debug logging to EventEmitter.  Start with NODE_DEBUG=mock-tls-server
-to see all events.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="socket.js.html">socket.js</a>, <a href="socket.js.html#line58">line 58</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -343,13 +149,16 @@ to see all events.
 
         <tr>
             
-                <td class="name"><code>eventName</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>string</code></span>
+<span class="param-type"><code><a href="global.html#ServerOpts">ServerOpts</a></code></span>
+|
+
+<span class="param-type"><code><a href="global.html#SecureConnectionCallback">SecureConnectionCallback</a></code></span>
 
 
             
@@ -357,6 +166,8 @@ to see all events.
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -368,7 +179,7 @@ to see all events.
             
 
             <td class="description last">
-                The name of the event.
+                Server options.
                 
             </td>
         </tr>
@@ -377,13 +188,13 @@ to see all events.
 
         <tr>
             
-                <td class="name"><code>args</code></td>
+                <td class="name"><code>secureConnectionListener</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Array.&lt;any></code></span>
+<span class="param-type"><code><a href="global.html#SecureConnectionCallback">SecureConnectionCallback</a></code></span>
 
 
             
@@ -392,11 +203,11 @@ to see all events.
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
 
                 
-                    &lt;repeatable><br>
+
                 
                 </td>
             
@@ -404,7 +215,8 @@ to see all events.
             
 
             <td class="description last">
-                The arguments to be passed to listeners.
+                Installed as
+  a listener for the 'secureConnection' event.
                 
             </td>
         </tr>
@@ -426,42 +238,177 @@ to see all events.
 
 
 
-<div class="section-returns">
-<h5>Returns:</h5>
+
+
+</div>
+    
+    </div>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="MockTLSServer.html">MockTLSServer</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
 
         
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>boolean</code></span>
+            
+<div class="section-members">
+<h4 class="name" id="ca"><span class="type-signature"></span>ca<span class="type-signature"> :<a href="CertificateAuthority.html">CertificateAuthority</a></span></h4>
 
 
-    </dd>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line74">line 74</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-<div class="param-desc">
-    Returns `true` if the event had listeners, `false`
-  otherwise.
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code><a href="CertificateAuthority.html">CertificateAuthority</a></code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
 </div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="cert"><span class="type-signature"></span>cert<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+
+
+
+<dl class="details">
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line78">line 78</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>string</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
 </div>
 
-
-
-</div>
         
     
 
     
-
-    
-        <h3 class="subsection-title">Events</h3>
+        <h3 class="subsection-title">Methods</h3>
 
         
             
@@ -469,14 +416,15 @@ to see all events.
 
     
 
-    <h4 class="name" id="event:written">written</h4>
+    <h4 class="name" id="listen"><span class="type-signature"></span>listen<span class="signature">(options<span class="signature-attributes">opt</span>, secureConnectionListener<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="MockTLSServer.html">MockTLSServer</a>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Data was written to a HalfSocket.
+    Listen for incoming connections.  Whenever `connect` is called on this
+server's port, create a mock socket wrapped in a TLSSocket.
 </div>
 
 
@@ -512,7 +460,7 @@ to see all events.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="socket.js.html">socket.js</a>, <a href="socket.js.html#line13">line 13</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line104">line 104</a>
     </li></ul></dd>
     
 
@@ -544,6 +492,8 @@ to see all events.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -556,27 +506,37 @@ to see all events.
 
         <tr>
             
-                <td class="name"><code>data</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Buffer</code></span>
+<span class="param-type"><code>number</code></span>
 |
 
-<span class="param-type"><code>string</code></span>
+<span class="param-type"><code><a href="global.html#ListenOptions">ListenOptions</a></code></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">
-                The data that was written.
+                Port number or options object.
                 
             </td>
         </tr>
@@ -585,24 +545,35 @@ to see all events.
 
         <tr>
             
-                <td class="name"><code>encoding</code></td>
+                <td class="name"><code>secureConnectionListener</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>string</code></span>
+<span class="param-type"><code>function</code></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">
-                The encoding for the data.
+                If it exists, installed as
+  a listener for the 'secureConnection' event.
                 
             </td>
         </tr>
@@ -624,10 +595,39 @@ to see all events.
 
 
 
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="MockTLSServer.html">MockTLSServer</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    This.
+</div>
+
+    
+</div>
+
 
 
 </div>
         
+    
+
+    
+
     
 </article>
 

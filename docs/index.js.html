@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>socket.js - Documentation</title>
+    <title>index.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">socket.js</h1>
+    <h1 class="page-title">index.js</h1>
     
 
     
@@ -39,117 +39,158 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import {log} from './utils.js'
-import stream from 'stream'
-import util from 'util'
+            <pre class="prettyprint source linenums"><code>import {log, normalizeArgs, select} from './utils.js'
+import {CertificateAuthority} from './ca.js'
+import net from './net.js'
+import tls from 'tls'
 
-// A mock socket is two duplex HalfSockets, each of which is connected to the
-// other with a crossover cable.
-
-// Summary of node stream events:
-// end() => 'finish' (the send side)
-// push(null) => 'end' (the receive side)
-// 'finish' + 'end' => 'close'
+const PRIVATE = new WeakMap()
 
 /**
- * Data was written to a HalfSocket.
- *
- * @event HalfSocket#written
- * @param {Buffer|string} data The data that was written.
- * @param {string} encoding The encoding for the data.
+ * @callback SecureConnectionCallback
+ * @param {tls.TLSSocket} sock The server side of the socket that was connected.
+ * @returns {void}
  */
-const WRITTEN_EVENT = 'written'
 
 /**
- * One end of a socket, either client or server.  Serves as a pass-through to
- * the other side.
- *
- * @fires {HalfSocket#written} When data is written to this side of the socket
- *   to be sent.
+ * @typedef {object} ServerOpts
+ * @property {CertificateAuthority} [ca] A CA instance to use.  If you are
+ *   creating lots of servers, create one CA to pass into each of them, so
+ *   that certs don't need to be created from scratch for each.
+ * @property {SecureConnectionCallback} [secureConnectionListener] Installed
+ *   as a listener for the 'secureConnection' event.
+ * @property {Date} [notafter='Now + 5m'] Certificate not valid after this
+ *   date.
+ * @property {Date} [notbefore='Now - 1s'] Certificate not valid before this
+ *   date.
+ * @property {string} [subject] Subject Distinguished Name (DN).
+ * @property {string[]} [names=['localhost']] DNS Subject Alternative Names
+ *   for the cert.  Ignored for the CA cert.
+ * @property {boolean} [allowHalfOpen=false] If set to false, then the
+ *   socket will automatically end the writable side when the readable side
+ *   ends.
  */
-export class HalfSocket extends stream.Duplex {
+
+/**
+ * A TLS server that mocks the network, but all of the crypto code is real.
+ */
+export class MockTLSServer extends net.Server {
   /**
-   * Creates an instance of HalfSocket.
+   * Create a MockTLSServer instance.
    *
-   * @param {string} name The name of this socket end, for debugging.
-   * @param {stream.DuplexOptions} opts Options for the socket end.
+   * @param {ServerOpts|SecureConnectionCallback} [options] Server options.
+   * @param {SecureConnectionCallback} [secureConnectionListener] Installed as
+   *   a listener for the 'secureConnection' event.
    */
-  constructor(name, opts) {
-    opts = {
-      // These have slightly different values between Duplex and Socket
-      // on node 12 and 16.
-      allowHalfOpen: false,
-      autoDestroy: true,
-      emitClose: true,
-      ...opts,
+  constructor(options, secureConnectionListener) {
+    const opts = normalizeArgs(options, {secureConnectionListener})
+    const [local_opts, cert_opts, socket_opts] = select(
+      opts,
+      ['ca', 'secureConnectionListener'],
+      ['notafter', 'notbefore', 'subject', 'names']
+    )
+
+    super(socket_opts, sock => {
+      // Turn connection into TLS sock and call secureConnectionListener
+      // @ts-ignore TS2345: Duplex should be allowed.
+      const tsock = new tls.TLSSocket(sock, {
+        isServer: true,
+        requestCert: false,
+        cert: this.cert,
+        key: PRIVATE.get(this),
+      })
+      const temit = tsock.emit
+      tsock.emit = (eventName, ...args) => {
+        log('tls', eventName, ...args.map(
+          o => ((typeof o === 'object') ? o.constructor.name || o.toString() : o)
+        ))
+        return temit.call(tsock, eventName, ...args)
+      }
+      tsock.on('secure', () => {
+        process.nextTick(() => this.emit('secureConnection', tsock))
+      })
+    })
+
+    /** @type {CertificateAuthority} */
+    this.ca = local_opts.ca || new CertificateAuthority()
+    const serverProps = this.ca.issue(cert_opts)
+
+    /** @type {string} */
+    this.cert = serverProps.cert
+    PRIVATE.set(this, serverProps.key)
+
+    if (local_opts.secureConnectionListener) {
+      this.on('secureConnection', local_opts.secureConnectionListener)
     }
-    super(opts)
-    this.name = name
+    // Create a real TLSSocket for each connection.
   }
 
   /**
-   * Add debug logging to EventEmitter.  Start with NODE_DEBUG=mock-tls-server
-   * to see all events.
-   *
-   * @param {string} eventName The name of the event.
-   * @param {any[]} args The arguments to be passed to listeners.
-   * @returns {boolean} Returns `true` if the event had listeners, `false`
-   *   otherwise.
+   * @typedef {object} ListenOptions
+   * @property {number} port The port to listen on.
+   * @property {Function} secureConnectionListener If it exists, installed as
+   *   a listener for the 'secureConnection' event.
    */
-  emit(eventName, ...args) {
-    log(this.name, eventName, ...args)
-    return super.emit(eventName, ...args)
-  }
 
-  _write(chunk, encoding, cb) {
-    // De-couple the halves
-    this.emit(WRITTEN_EVENT, chunk, encoding)
-    cb()
-  }
+  /**
+   * Listen for incoming connections.  Whenever `connect` is called on this
+   * server's port, create a mock socket wrapped in a TLSSocket.
+   *
+   * @param {number|ListenOptions} [options] Port number or options object.
+   * @param {Function} [secureConnectionListener] If it exists, installed as
+   *   a listener for the 'secureConnection' event.
+   * @returns {MockTLSServer} This.
+   */
+  // @ts-ignore TS2416: This is compatible-enough with the base class.
+  listen(options, secureConnectionListener) {
+    const opts = normalizeArgs(options, {secureConnectionListener})
 
-  // eslint-disable-next-line class-methods-use-this, no-empty-function
-  _read(sz) {
-  }
-
-  [util.inspect.custom]() {
-    return `[HalfSocket "${this.name}"]`
+    if (opts.secureConnectionListener) {
+      this.on('secureConnection', opts.secureConnectionListener)
+    }
+    super.listen(opts.port)
+    return this
   }
 }
 
 /**
- * A double-ended mock socket, for use in testing.  No actual network
- * connections are created, so this can be used for testing no matter what
- * permissions you have in your CI system.
+ * @typedef {object} SocketConnectOpts
+ * @property {number} port Listening server port to connect to.
+ * @property {boolean} [allowHalfOpen=false] If set to false, then the
+ *   socket will automatically end the writable side when the readable side
+ *   ends.
  */
-export class MockSocket extends stream.Duplex {
-  /**
-   * Creates an instance of MockSocket.
-   *
-   * @param {stream.DuplexOptions} opts Options for both server and client
-   *   sides.
-   */
-  constructor(opts) {
-    super(opts)
-    this.clientSocket = new HalfSocket('cli', opts)
-    this.serverSocket = new HalfSocket('srv', opts)
 
-    this.clientSocket.on(WRITTEN_EVENT, (chunk, encoding) => {
-      this.serverSocket.push(chunk)
-    })
-    this.serverSocket.on(WRITTEN_EVENT, (chunk, encoding) => {
-      this.clientSocket.push(chunk)
-    })
+/**
+ * Create a client connection to a listening server.
+ *
+ * @param {SocketConnectOpts|number} options Port to connect to.
+ * @param {Function} [secureConnectListener] If specified, function is
+ *   registered for the 'secureConnect'.
+ * @returns {tls.TLSSocket} Socket.
+ */
+export function connect(options, secureConnectListener) {
+  const {port, secureConnectListener: scl, ...opts} =
+    normalizeArgs(options, {secureConnectListener})
 
-    // This is from the song by Jimmy Buffer:
-    // FINs to the left.
-    this.clientSocket.on('finish', () => {
-      this.serverSocket.push(null)
-    })
-    // FINs to the right.
-    this.serverSocket.on('finish', () => {
-      this.clientSocket.push(null)
-    })
+  opts.socket = net.connect(port) // Emits error if connection failed
+  const srv = net.getServer(port)
+  if (srv &amp;&amp; (srv instanceof MockTLSServer)) {
+    opts.ca = srv.ca.cert_pem
   }
+
+  const secureSocket = tls.connect(opts)
+  if (scl) {
+    secureSocket.on('secure', scl)
+  }
+  return secureSocket
+}
+
+export const plainConnect = net.connect
+export default {
+  MockTLSServer,
+  connect,
+  plainConnect,
 }
 </code></pre>
         </article>
