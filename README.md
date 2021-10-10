@@ -98,3 +98,6 @@ NODE_DEBUG environment variable and including `mock-tls-server`:
 ```bash
 NODE_DEBUG=mock-tls-server node examples/echo.js
 ```
+
+[![Tests](https://github.com/hildjj/mock-tls-server/actions/workflows/node.js.yml/badge.svg)](https://github.com/hildjj/mock-tls-server/actions/workflows/node.js.yml)
+[![codecov](https://codecov.io/gh/hildjj/mock-tls-server/branch/main/graph/badge.svg?token=86PXRWEHKH)](https://codecov.io/gh/hildjj/mock-tls-server)
