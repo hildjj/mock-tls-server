@@ -133,6 +133,9 @@ export class MockSocket extends stream.Duplex {
     this.clientSocket = new HalfSocket('cli', opts)
     this.serverSocket = new HalfSocket('srv', opts)
 
+    // Simulate the TCP flavor of the Internet.
+    // If we were going to add delays, throttling, or Nagel-like coalescing,
+    // this would be the place to do it.
     this.clientSocket.on(WRITTEN_EVENT, (chunk, encoding) => {
       this.serverSocket.push(chunk)
     })

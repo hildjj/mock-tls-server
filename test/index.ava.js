@@ -1,5 +1,6 @@
 import {MockTLSServer, connect} from '../lib/index.js'
 import {Buffer} from 'buffer'
+import {CertificateAuthority} from '../lib/ca.js'
 import pEvent from 'p-event'
 import test from 'ava'
 
@@ -16,7 +17,7 @@ test('echo server', async t => {
   cli.on('data', chunk => {
     bufs.push(chunk)
   })
-  await pEvent(cli, 'secure')
+  await pEvent(cli, 'secureConnect')
   cli.end('foo')
   await pEvent(cli, 'close')
   t.is(Buffer.concat(bufs).toString(), 'Hi\nfoo')
@@ -46,4 +47,19 @@ test('echo server2', async t => {
   t.true(gotSecureConnect)
   t.is(Buffer.concat(bufs).toString(), 'Hi\nfoo')
   s.close()
+})
+
+test('explicit cert and ca', async t => {
+  const ca = new CertificateAuthority()
+  const serverProps = ca.issue()
+  const s = new MockTLSServer({
+    ...serverProps,
+  })
+  s.listen()
+  await pEvent(s, 'listening')
+  const cli = connect(s.port)
+  cli.end()
+  await pEvent(cli, 'close')
+  s.close()
+  t.pass()
 })
