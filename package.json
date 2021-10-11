@@ -4,6 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "type": "module",
+  "types": "types/index.d.ts",
   "scripts": {
     "test": "ava",
     "coverage": "c8 --all --src lib -r lcov npm test",
