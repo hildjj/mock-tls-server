@@ -23,17 +23,17 @@ jobs:
       NODE: ${{ matrix.node-version }}
     steps:
       - uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 7.17.0
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 7.17.0
-          run_install: |
-            - args: [--frozen-lockfile, --strict-peer-dependencies]
+      - name: Install dependencies
+        run: pnpm install
       - run: npm run lint
       - run: npm run coverage
       - name: Upload coverage to Codecov
