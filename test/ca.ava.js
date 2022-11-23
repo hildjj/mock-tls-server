@@ -26,6 +26,7 @@ test('ca', t => {
     const k = crypto.createPrivateKey(srv.key)
     t.true(x_srv.checkPrivateKey(k))
   } else {
+    // eslint-disable-next-line no-console
     console.error('skipping X509Certificate tests')
   }
 })

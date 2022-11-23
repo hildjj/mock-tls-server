@@ -1,7 +1,7 @@
 import {MockTLSServer, connect} from '../lib/index.js'
 import {Buffer} from 'buffer'
 import {CertificateAuthority} from '../lib/ca.js'
-import pEvent from 'p-event'
+import {pEvent} from 'p-event'
 import test from 'ava'
 
 test('echo server', async t => {
