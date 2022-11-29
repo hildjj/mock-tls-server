@@ -1,7 +1,7 @@
 import {HalfSocket, MockSocket} from '../lib/socket.js'
 import {Buffer} from 'buffer'
 import {inspect} from 'util'
-import pEvent from 'p-event'
+import {pEvent} from 'p-event'
 import test from 'ava'
 
 test('HalfSocket', async t => {

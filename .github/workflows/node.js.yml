@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12, 14, 16]
+        node-version: [14, 16, 18]
         platform: [ubuntu-latest]
 
     runs-on: ${{ matrix.platform }}
@@ -22,16 +22,22 @@ jobs:
       OS: ${{ matrix.os }}
       NODE: ${{ matrix.node-version }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 7.17.0
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
       - run: npm run lint
       - run: npm run coverage
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           files: coverage/lcov.info
           env_vars: OS,NODE

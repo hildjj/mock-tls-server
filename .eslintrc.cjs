@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = {
   root: true,
   ignorePatterns: [
@@ -5,24 +7,5 @@ module.exports = {
     'docs/',
     'coverage/',
   ],
-  extends: ['@cto.af'],
-  parserOptions: {
-    sourceType: 'module',
-  },
-  rules: {
-    'sort-imports': 'error',
-    'capitalized-comments': ['error', 'always', {
-      ignoreConsecutiveComments: true,
-      ignorePattern: 'c8',
-    }],
-
-    // [Possible Errors](https://eslint.org/docs/rules/#possible-errors)
-    'node/no-unsupported-features/es-syntax': [
-      'error',
-      {
-        version: '>=12.19',
-        ignores: ['modules'],
-      },
-    ],
-  },
+  extends: ['@cto.af/eslint-config/modules'],
 }

@@ -1,7 +1,7 @@
 import {MockTLSServer, connect} from '../lib/index.js'
 import {Buffer} from 'buffer'
 import {CertificateAuthority} from '../lib/ca.js'
-import pEvent from 'p-event'
+import {pEvent} from 'p-event'
 import test from 'ava'
 
 test('echo server', async t => {
@@ -57,9 +57,16 @@ test('explicit cert and ca', async t => {
   })
   s.listen()
   await pEvent(s, 'listening')
-  const cli = connect(s.port)
+  // Extra steps to ensure node 18 doesn't deadlock.
+  let res = null
+  const connected = new Promise(resolve => {
+    res = resolve
+  })
+  const cli = connect(s.port, res)
+  await connected
+  const close = pEvent(cli, 'close')
   cli.end()
-  await pEvent(cli, 'close')
+  await close
   s.close()
   t.pass()
 })

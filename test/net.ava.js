@@ -1,6 +1,6 @@
 import {Buffer} from 'buffer'
 import net from '../lib/net.js'
-import pEvent from 'p-event'
+import {pEvent} from 'p-event'
 import {promisify} from 'util'
 import test from 'ava'
 
