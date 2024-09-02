@@ -4,7 +4,7 @@ import {CertificateAuthority} from '../lib/ca.js';
 import {pEvent} from 'p-event';
 import test from 'ava';
 
-test('PPP echo server', async t => {
+test('echo server', async t => {
   const s = new MockTLSServer();
   t.truthy(s);
   s.listen(sock => {

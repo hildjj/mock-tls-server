@@ -6,12 +6,11 @@
   "type": "module",
   "types": "types/index.d.ts",
   "scripts": {
-    "test": "ava",
-    "coverage": "c8 --all --src lib -r lcov npm test",
+    "test": "c8 ava",
     "lint": "eslint .",
-    "docs": "jsdoc -c .jsdoc.conf",
+    "docs": "typedoc",
     "types": "tsc",
-    "check": "npm run lint && npm run types && npm run docs && npm run coverage && npm pack --dry-run"
+    "build": "npm run lint && npm run types && npm run docs && npm run test && npm pack --dry-run"
   },
   "keywords": [
     "tls",
@@ -34,6 +33,7 @@
   },
   "devDependencies": {
     "@cto.af/eslint-config": "4.1.6",
+    "@types/jsrsasign": "10.5.14",
     "@types/node": "22.5.2",
     "ava": "6.1.3",
     "c8": "10.1.2",

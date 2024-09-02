@@ -2,21 +2,20 @@
 
 /** @type {import('typedoc').TypeDocOptions} */
 module.exports = {
-  entryPoints: 'lib/index.js',
+  entryPoints: ['lib/index.js', 'lib/ca.js', 'lib/net.js'],
   out: 'docs',
+
+  categorizeByGroup: false,
   cleanOutputDir: true,
-  sidebarLinks: {
-    'Playground': '/cbor2/playground/index.html',
-    'cbor-edn': 'https://github.com/hildjj/cbor-edn',
-    'GitHub': 'https://github.com/hildjj/cbor2/',
-    'Spec': 'http://cbor.io/',
-    'Documentation': 'http://hildjj.github.io/cbor2/',
-  },
+  exclude: ['**/*.spec.ts'],
+  includeVersion: true,
   navigation: {
     includeCategories: false,
     includeGroups: false,
   },
-  categorizeByGroup: false,
+  sidebarLinks: {
+    GitHub: 'https://github.com/hildjj/mock-tls-server/',
+    Documentation: 'http://hildjj.github.io/mock-tls-server/',
+  },
   sort: ['static-first', 'alphabetical'],
-  exclude: ['**/*.spec.ts'],
 };

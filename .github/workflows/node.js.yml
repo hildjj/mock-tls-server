@@ -32,8 +32,7 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - run: npm run lint
-      - run: npm run coverage
+      - run: npm run build
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
