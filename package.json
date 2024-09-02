@@ -8,7 +8,7 @@
   "scripts": {
     "test": "ava",
     "coverage": "c8 --all --src lib -r lcov npm test",
-    "lint": "eslint . --ext js",
+    "lint": "eslint .",
     "docs": "jsdoc -c .jsdoc.conf",
     "types": "tsc",
     "check": "npm run lint && npm run types && npm run docs && npm run coverage && npm pack --dry-run"
@@ -30,20 +30,19 @@
   "license": "MIT",
   "repository": "hildjj/mock-tls-server",
   "dependencies": {
-    "jsrsasign": "^11.1.0"
+    "jsrsasign": "11.1.0"
   },
   "devDependencies": {
-    "@cto.af/eslint-config": "^4.1.6",
-    "@types/node": "^22.5.2",
-    "ava": "^6.1.3",
-    "c8": "^10.1.2",
-    "eslint": "^8.28.0",
+    "@cto.af/eslint-config": "4.1.6",
+    "@types/node": "22.5.2",
+    "ava": "6.1.3",
+    "c8": "10.1.2",
+    "eslint": "9.9.1",
     "eslint-plugin-ava": "^15.0.1",
-    "eslint-plugin-jsdoc": "^50.2.2",
-    "eslint-plugin-node": "^11.1.0",
-    "jsdoc": "^4.0.3",
-    "minami": "^1.2.3",
-    "p-event": "^6.0.1",
+    "eslint-plugin-jsdoc": "50.2.2",
+    "eslint-plugin-markdown": "5.1.0",
+    "eslint-plugin-node": "11.1.0",
+    "p-event": "6.0.1",
     "typescript": "^5.5.4"
   },
   "packageManager": "pnpm@9.9.0",

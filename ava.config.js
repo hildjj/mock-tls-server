@@ -3,4 +3,4 @@ export default {
     'test/*.ava.js',
   ],
   timeout: '5m',
-}
+};
