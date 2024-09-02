@@ -70,3 +70,15 @@ test('explicit cert and ca', async t => {
   s.close();
   t.pass();
 });
+
+test('just a callback', t => {
+  const s = new MockTLSServer(sock => {
+    sock.write('Hi\n');
+    sock.pipe(sock);
+  });
+  t.truthy(s);
+});
+
+test('connect fail', t => {
+  t.throws(() => connect({}));
+});
