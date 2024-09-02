@@ -1,5 +1,6 @@
 .editorconfig
 .eslintrc.cjs
+.gitattributes
 .github
 .jsdoc.conf
 .ncurc.json
