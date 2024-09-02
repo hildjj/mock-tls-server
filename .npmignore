@@ -11,3 +11,4 @@ eslint.config.js
 examples/
 test/
 tsconfig.json
+typedoc.config.cjs

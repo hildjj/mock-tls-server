@@ -43,6 +43,7 @@
     "eslint-plugin-markdown": "5.1.0",
     "eslint-plugin-node": "11.1.0",
     "p-event": "6.0.1",
+    "typedoc": "0.26.6",
     "typescript": "^5.5.4"
   },
   "packageManager": "pnpm@9.9.0",
