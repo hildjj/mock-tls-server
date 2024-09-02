@@ -1,2 +1,5 @@
+.vscode/
 coverage/
 node_modules
+types/
+docs/

@@ -1,5 +1,7 @@
+.c8rc
 .editorconfig
 .eslintrc.cjs
+.gitattributes
 .github
 .jsdoc.conf
 .ncurc.json
@@ -7,6 +9,8 @@
 ava.config.js
 coverage/
 docs/
+eslint.config.js
 examples/
 test/
 tsconfig.json
+typedoc.config.cjs
