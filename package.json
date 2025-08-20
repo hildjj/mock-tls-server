@@ -5,6 +5,10 @@
   "main": "lib/index.js",
   "type": "module",
   "types": "types/index.d.ts",
+  "files": [
+    "lib",
+    "types"
+  ],
   "scripts": {
     "test": "c8 ava",
     "lint": "eslint .",
@@ -47,6 +51,6 @@
   },
   "packageManager": "pnpm@10.15.0",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   }
 }
