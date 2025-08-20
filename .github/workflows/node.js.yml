@@ -6,14 +6,14 @@ on:
     branches:
       - '*'
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   build:
 
     strategy:
       matrix:
-        node-version: [18, 20, 22]
+        node-version: [20, 22, 24]
         platform: [ubuntu-latest]
 
     runs-on: ${{ matrix.platform }}
@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install pnpm
-        run: corepack enable
+        uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -34,6 +34,6 @@ jobs:
         run: pnpm install
       - run: npm run build
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
