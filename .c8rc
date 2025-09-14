@@ -6,6 +6,6 @@
   "exclude": [
     "**/test/**",
     "**/node_modules/**",
-    "ava.config.cjs"
+    "ava.config.js"
   ]
 }
