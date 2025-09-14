@@ -3,8 +3,7 @@ name: Tests
 
 on:
   push:
-    branches:
-      - '*'
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -22,11 +21,11 @@ jobs:
       OS: ${{ matrix.os }}
       NODE: ${{ matrix.node-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install pnpm
         uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
