@@ -1,6 +1,6 @@
 import {MockTLSServer, connect} from '../lib/index.js';
 import {Buffer} from 'node:buffer';
-import {CertificateAuthority} from '../lib/ca.js';
+import {CertificateAuthority} from '@cto.af/ca';
 import {pEvent} from 'p-event';
 import test from 'ava';
 
@@ -50,10 +50,13 @@ test('echo server2', async t => {
 });
 
 test('explicit cert and ca', async t => {
-  const ca = new CertificateAuthority();
-  const serverProps = ca.issue();
+  const ca = new CertificateAuthority({temp: true});
+  const kc = await ca.issue({temp: true});
+  t.throws(() => new MockTLSServer({cert: kc.cert}));
   const s = new MockTLSServer({
-    ...serverProps,
+    key: kc.key,
+    cert: kc.cert,
+    ca: kc.ca.cert,
   });
   s.listen();
   await pEvent(s, 'listening');
