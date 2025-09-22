@@ -1,4 +1,5 @@
-import {normalizeArgs, select} from '../lib/utils.js';
+import {classNames, normalizeArgs} from '../lib/utils.js';
+import {Buffer} from 'node:buffer';
 import test from 'ava';
 
 test('normalizeArgs', t => {
@@ -6,9 +7,8 @@ test('normalizeArgs', t => {
   t.throws(() => normalizeArgs(() => 0));
 });
 
-test('select', t => {
-  t.deepEqual(select(), [{}]);
-  t.deepEqual(select({a: 2}), [{a: 2}]);
-  t.deepEqual(select({a: 2}, ['a']), [{a: 2}, {}]);
-  t.deepEqual(select({a: 2}, ['b']), [{}, {a: 2}]);
+test('classNames', t => {
+  const o = Object.create(null);
+  const n = classNames([1, 'two', null, {a: 1}, o, Buffer.from([])]);
+  t.deepEqual(n, ['1', 'two', 'null', 'Object', '{}', 'Buffer']);
 });

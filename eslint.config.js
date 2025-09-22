@@ -1,8 +1,7 @@
 import ava from '@cto.af/eslint-config/ava.js';
-import base from '@cto.af/eslint-config';
+import es6 from '@cto.af/eslint-config/es6.js';
 import jsdoc_ts from '@cto.af/eslint-config/jsdoc_ts.js';
 import markdown from '@cto.af/eslint-config/markdown.js';
-import mod from '@cto.af/eslint-config/module.js';
 
 export default [
   {
@@ -10,8 +9,7 @@ export default [
       'types/*',
     ],
   },
-  ...base,
-  ...mod,
+  ...es6,
   ...jsdoc_ts,
   ...markdown,
   ...ava,
