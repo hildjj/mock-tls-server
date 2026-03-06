@@ -1,5 +1,7 @@
+.DS_Store
+.pnpm-store/
 .vscode/
 coverage/
+docs/
 node_modules
 types/
-docs/

@@ -2,7 +2,7 @@
 
 /** @type {import('typedoc').TypeDocOptions} */
 module.exports = {
-  entryPoints: ['lib/index.js', 'lib/ca.js', 'lib/net.js'],
+  entryPoints: ['lib/index.js', 'lib/net.js'],
   out: 'docs',
 
   categorizeByGroup: false,

@@ -58,6 +58,7 @@ test('explicit cert and ca', async t => {
     cert: kc.cert,
     ca: kc.ca.cert,
   });
+  t.truthy(s);
   s.listen();
   await pEvent(s, 'listening');
   // Extra steps to ensure node 18 doesn't deadlock.
@@ -66,12 +67,12 @@ test('explicit cert and ca', async t => {
     res = resolve;
   });
   const cli = connect(s.port, res);
+  t.truthy(cli);
   await connected;
   const close = pEvent(cli, 'close');
   cli.end();
   await close;
   s.close();
-  t.pass();
 });
 
 test('just a callback', t => {
