@@ -33,25 +33,25 @@
   "license": "MIT",
   "repository": "hildjj/mock-tls-server",
   "dependencies": {
-    "@cto.af/ca": "2.6.4",
-    "@cto.af/utils": "1.4.2"
+    "@cto.af/ca": "4.0.2",
+    "@cto.af/utils": "2.0.1"
   },
   "devDependencies": {
-    "@cto.af/eslint-config": "6.2.5",
-    "@eslint/markdown": "^7.5.1",
-    "@types/jsrsasign": "^10.5.15",
-    "@types/node": "^25.5.0",
-    "ava": "^7.0.0",
-    "eslint": "^10.1.0",
-    "eslint-plugin-ava": "^16.0.0",
-    "eslint-plugin-jsdoc": "^62.8.0",
-    "p-event": "^7.1.0",
-    "superc8": "^12.3.1",
-    "typedoc": "^0.28.17",
-    "typescript": "^5.9.3"
+    "@cto.af/eslint-config": "7.0.4",
+    "@eslint/markdown": "^8.0.3",
+    "@types/node": "^26.6.5",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "ava": "^8.1.2",
+    "eslint": "^10.13.0",
+    "eslint-plugin-ava": "^18.0.0",
+    "eslint-plugin-jsdoc": "^65.4.2",
+    "p-event": "^8.0.1",
+    "superc8": "^12.7.0",
+    "typedoc": "^0.28.20",
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
   },
-  "packageManager": "pnpm@10.32.1",
+  "packageManager": "pnpm@12.15.0",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   }
 }

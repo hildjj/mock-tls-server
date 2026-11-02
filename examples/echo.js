@@ -3,7 +3,7 @@ import {MockTLSServer, connect} from '../lib/index.js';
 // Expected output: "Welcome!\nexample\n"
 
 const server = new MockTLSServer();
-server.listen(4000, sock => {
+await server.listen(4000, sock => {
   sock.write('Welcome!\n');
   sock.pipe(sock);
 });
