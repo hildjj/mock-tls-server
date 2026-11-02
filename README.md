@@ -30,7 +30,7 @@ import {MockTLSServer, connect} from 'mock-tls-server';
 // Expected output: "Welcome!\nexample\n"
 
 const server = new MockTLSServer();
-server.listen(4000, sock => {
+await server.listen(4000, sock => {
   sock.write('Welcome!\n');
   sock.pipe(sock);
 });
@@ -77,7 +77,7 @@ import tls from 'node:tls';
 const server = new MockTLSServer({
   notBefore: new Date(new Date().getTime() + 10000), // Invalid because of time
 });
-server.listen();
+await server.listen();
 await pEvent(server, 'listening');
 const socket = plainConnect(server.port);
 tls.connect({

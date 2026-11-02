@@ -7,7 +7,7 @@ import test from 'ava';
 test('echo server', async t => {
   const s = new MockTLSServer();
   t.truthy(s);
-  s.listen(sock => {
+  await s.listen(sock => {
     sock.write('Hi\n');
     sock.pipe(sock);
   });
@@ -34,7 +34,7 @@ test('echo server2', async t => {
     },
   });
   t.truthy(s);
-  s.listen();
+  await s.listen();
   await pEvent(s, 'listening');
   let gotConnect = false;
   const cli = connect(s.port, () => (gotConnect = true));
@@ -59,7 +59,7 @@ test('explicit cert and ca', async t => {
     ca: kc.ca.cert,
   });
   t.truthy(s);
-  s.listen();
+  await s.listen();
   await pEvent(s, 'listening');
   // Extra steps to ensure node 18 doesn't deadlock.
   let res = null;
